@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <Copyright />
+    <PackageId>MonoidSharpDotNet</PackageId>
+    <Version>0.0.1-alpha</Version>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/jr-araujo/monoidsharp</RepositoryUrl>
+    <Authors>José Roberto Araújo</Authors>
+    <Company></Company>
+    <PackageProjectUrl>https://github.com/jr-araujo/monoidsharp</PackageProjectUrl>
+    <Description>MonoidSharp is a lib that brings functional concepts to C#</Description>
+    <PackageTags>C#, Functional Programming, .Net Core</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+</Project>

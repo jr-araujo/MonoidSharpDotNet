@@ -1,0 +1,112 @@
+name: Build
+
+on:
+    push:
+        branches: master
+        tags:
+          - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@master
+
+            - name: 'Grab Current Tag Version'
+              id: grab_current_tag_version
+              uses: jaliborc/action-general-autotag@1.0.1
+              with:
+                GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+                source_file: "package.json"
+                extraction_regex: "\\s*\"version\"s*:\\s*\"([\\d\\.]+)\""
+        
+            - name: 'Generate next version'
+              id: semvers
+              uses: "WyriHaximus/github-action-next-semvers@master"
+              with:
+                version: ${{ steps.grab_current_tag_version.outputs.version }}
+            
+            # - name: Show New Major Version
+            #   run: echo "New tag version -> ${{ steps.semvers.outputs.major }}"
+
+            # - name: Show New Minor Version
+            #   run: echo "New tag version -> ${{ steps.semvers.outputs.minor }}"
+
+            # - name: Show New Patch Version
+            #   run: echo "New tag version -> ${{ steps.semvers.outputs.patch }}"
+
+            - name: Update Json Version File
+              id: update_json_version_file
+              uses: rfennell/JSONFileVersioner@v1
+              with:
+                field: 'version'
+                VersionNumber: '${{ steps.semvers.outputs.patch }}'
+                filenamepattern: '.json' 
+                recursion: 'true'
+
+            - name: Determine version
+              run: echo "::set-env name=VERSION::${{ steps.semvers.outputs.patch }}"
+
+            - name: Setup .NET Core
+              uses: actions/setup-dotnet@v1
+              with:
+                dotnet-version: 3.1.101
+
+            - name: Build
+              run: dotnet build --configuration Release -p:Version=$VERSION
+              working-directory: .
+
+            - name: Run Unit Tests
+              run: dotnet test --no-build --configuration Release -p:Version=$VERSION
+              working-directory: .
+
+            # - name: Generate nuget package
+            #   run: dotnet pack --configuration Release -o nupkg -p:Version=$VERSION
+            #   working-directory: .
+
+            - name: Commit Updated Json Version File
+              uses: mikeal/publish-to-github-action@master
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publishing Release
+              uses: ncipollo/release-action@v1
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                prerelease: true
+                tag: ${{ steps.semvers.outputs.patch }}
+
+            - name: Push Tag
+              uses: ChloePlanet/github-tag-action@master
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                CUSTOM_TAG: ${{ steps.semvers.outputs.patch }}
+
+            - name: Generate nuget package
+              run: dotnet pack --configuration Release /p:PackageVersion=$VERSION -o nupkg
+              working-directory: ./MonoidSharp
+
+            - name: Publish nuget package
+              run: find . -name *.nupkg -type f -print0 | xargs -0 -I pkg dotnet nuget push pkg -k $nuget_api_key -s "https://api.nuget.org/v3/index.json" --skip-duplicate
+              env:
+                nuget_api_key: ${{ secrets.NUGET_API_KEY }}
+              working-directory: ./MonoidSharp/nupkg
+    # deploy:
+    #   runs-on: ubuntu-latest
+    #   needs: build
+    #   steps:
+    #     - name: Show current directory
+    #       run: pwd
+
+    #     - name: Show current directory
+    #       run: ls
+
+    #     - name: Generate nuget package
+    #       run: dotnet pack ./MonoidSharp/MonoidSharp.csproj --configuration Release -o nupkg -p:Version=$VERSION -o ./nupkg
+    #       working-directory: .
+
+    #     - name: Publish nuget package
+    #       # run: find ../ -name *.nupkg -type f -print0 | xargs -0 -I pkg dotnet nuget push pkg -k $nuget_api_key -s "https://api.nuget.org/v3/index.json" --skip-duplicate
+    #       run: dotnet nuget push ./MonoidSharp/**.nupkg --api-key ${{ secrets.NUGET_API_KEY }} -s "https://api.nuget.org/v3/index.json" --skip-duplicate
+    #       working-directory: .

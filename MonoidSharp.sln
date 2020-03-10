@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoidSharp", "MonoidSharp\MonoidSharp.csproj", "{084B17A9-0B6F-4D6D-96CA-E336C4AF75A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoidSharp.Tests", "MonoidSharp.Tests\MonoidSharp.Tests.csproj", "{EEABBD5E-A517-4B69-A5B1-1F2611FB0C69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{084B17A9-0B6F-4D6D-96CA-E336C4AF75A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084B17A9-0B6F-4D6D-96CA-E336C4AF75A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084B17A9-0B6F-4D6D-96CA-E336C4AF75A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084B17A9-0B6F-4D6D-96CA-E336C4AF75A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEABBD5E-A517-4B69-A5B1-1F2611FB0C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEABBD5E-A517-4B69-A5B1-1F2611FB0C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEABBD5E-A517-4B69-A5B1-1F2611FB0C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEABBD5E-A517-4B69-A5B1-1F2611FB0C69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {609D4284-CE5E-425E-B132-5BB9E8D09210}
+	EndGlobalSection
+EndGlobal
